@@ -25,11 +25,6 @@ resource "aws_route_table_association" "PublicAssociationB" {
 resource "aws_route_table" "privateRouteTable" {
   vpc_id = aws_vpc.TrainingVPC.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
-
 
   tags = {
     Name = "privateRouteTable"
@@ -41,7 +36,7 @@ resource "aws_route_table_association" "PrivateAssociationA" {
   route_table_id = aws_route_table.privateRouteTable.id
 }
 
-resource "aws_route_table_association" "PublicAssociationB" {
+resource "aws_route_table_association" "PrivateAssociationB" {
   subnet_id      = aws_subnet.privateSubnetB.id
   route_table_id = aws_route_table.privateRouteTable.id
 }
