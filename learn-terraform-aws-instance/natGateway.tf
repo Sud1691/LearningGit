@@ -1,5 +1,5 @@
 resource "aws_nat_gateway" "TrainingNGW" {
-  allocation_id = aws_eip.example.id
+  allocation_id = aws_eip.TrainingEIP.id
   subnet_id     = aws_subnet.publicSubnetA.id
 
   tags = {
@@ -9,7 +9,7 @@ resource "aws_nat_gateway" "TrainingNGW" {
 }
 
 resource "aws_nat_gateway" "TrainingNGW" {
-  allocation_id = aws_eip.example.id
+  allocation_id = aws_eip.TrainingEIP.id
   subnet_id     = aws_subnet.publicSubnetB.id
 
   tags = {
