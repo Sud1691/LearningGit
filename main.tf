@@ -35,7 +35,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_nat_gateway" "TrainingNGW" {
+resource "aws_nat_gateway" "TrainingNGWA" {
   allocation_id = aws_eip.TrainingEIP.id
   subnet_id     = aws_subnet.publicSubnetA.id
 
@@ -45,7 +45,7 @@ resource "aws_nat_gateway" "TrainingNGW" {
 
 }
 
-resource "aws_nat_gateway" "TrainingNGW" {
+resource "aws_nat_gateway" "TrainingNGWB" {
   allocation_id = aws_eip.TrainingEIP.id
   subnet_id     = aws_subnet.publicSubnetB.id
 
@@ -81,7 +81,10 @@ resource "aws_route_table_association" "PublicAssociationB" {
 
 resource "aws_route_table" "privateRouteTable" {
   vpc_id = aws_vpc.TrainingVPC.id
-
+route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.TrainingNGWA
+  }
 
   tags = {
     Name = "privateRouteTable"
