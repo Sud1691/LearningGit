@@ -3,7 +3,7 @@ resource "aws_nat_gateway" "TrainingNGW" {
   subnet_id     = aws_subnet.publicSubnetA.id
 
   tags = {
-    Name = "TrainingNGW"
+    Name = "TrainingNGWA"
   }
 
 }
@@ -13,7 +13,7 @@ resource "aws_nat_gateway" "TrainingNGW" {
   subnet_id     = aws_subnet.publicSubnetB.id
 
   tags = {
-    Name = "TrainingNGW"
+    Name = "TrainingNGWB"
   }
 
 }
