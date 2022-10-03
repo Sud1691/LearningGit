@@ -23,7 +23,11 @@ resource "aws_instance" "app_server" {
 }
 
 
-resource "aws_eip" "TrainingEIP" {
+resource "aws_eip" "TrainingEIPA" {
+  vpc              = true
+}
+
+resource "aws_eip" "TrainingEIPB" {
   vpc              = true
 }
 
@@ -36,7 +40,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_nat_gateway" "TrainingNGWA" {
-  allocation_id = aws_eip.TrainingEIP.id
+  allocation_id = aws_eip.TrainingEIPA.id
   subnet_id     = aws_subnet.publicSubnetA.id
 
   tags = {
@@ -46,7 +50,7 @@ resource "aws_nat_gateway" "TrainingNGWA" {
 }
 
 resource "aws_nat_gateway" "TrainingNGWB" {
-  allocation_id = aws_eip.TrainingEIP.id
+  allocation_id = aws_eip.TrainingEIPB.id
   subnet_id     = aws_subnet.publicSubnetB.id
 
   tags = {
@@ -84,11 +88,6 @@ resource "aws_route_table" "privateRouteTable" {
 route {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.TrainingNGWA.id
-  }
-
-route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.TrainingNGWB.id
   }
 
   tags = {
