@@ -83,7 +83,12 @@ resource "aws_route_table" "privateRouteTable" {
   vpc_id = aws_vpc.TrainingVPC.id
 route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.TrainingNGWA
+    nat_gateway_id = aws_nat_gateway.TrainingNGWA.id
+  }
+
+route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.TrainingNGWB.id
   }
 
   tags = {
