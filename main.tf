@@ -59,7 +59,7 @@ resource "aws_nat_gateway" "TrainingNGWB" {
 
 }
 
-resource "aws_route_table" "publicRouteTable" {
+resource "aws_route_table" "publicRouteTableA" {
   vpc_id = aws_vpc.TrainingVPC.id
 
   route {
@@ -69,21 +69,36 @@ resource "aws_route_table" "publicRouteTable" {
 
 
   tags = {
-    Name = "publicRouteTable"
+    Name = "publicRouteTableA"
+  }
+}
+
+resource "aws_route_table" "publicRouteTableB" {
+  vpc_id = aws_vpc.TrainingVPC.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+
+  tags = {
+    Name = "publicRouteTableB"
   }
 }
 
 resource "aws_route_table_association" "PublicAssociationA" {
   subnet_id      = aws_subnet.publicSubnetA.id
-  route_table_id = aws_route_table.publicRouteTable.id
+  route_table_id = aws_route_table.publicRouteTableA.id
 }
 
 resource "aws_route_table_association" "PublicAssociationB" {
   subnet_id      = aws_subnet.publicSubnetB.id
-  route_table_id = aws_route_table.publicRouteTable.id
+  route_table_id = aws_route_table.publicRouteTableB.id
 }
 
-resource "aws_route_table" "privateRouteTable" {
+
+resource "aws_route_table" "privateRouteTableA" {
   vpc_id = aws_vpc.TrainingVPC.id
 route {
     cidr_block = "0.0.0.0/0"
@@ -91,18 +106,30 @@ route {
   }
 
   tags = {
-    Name = "privateRouteTable"
+    Name = "privateRouteTableA"
+  }
+}
+
+resource "aws_route_table" "privateRouteTableB" {
+  vpc_id = aws_vpc.TrainingVPC.id
+route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.TrainingNGWB.id
+  }
+
+  tags = {
+    Name = "privateRouteTableB"
   }
 }
 
 resource "aws_route_table_association" "PrivateAssociationA" {
   subnet_id      = aws_subnet.privateSubnetA.id
-  route_table_id = aws_route_table.privateRouteTable.id
+  route_table_id = aws_route_table.privateRouteTableA.id
 }
 
 resource "aws_route_table_association" "PrivateAssociationB" {
   subnet_id      = aws_subnet.privateSubnetB.id
-  route_table_id = aws_route_table.privateRouteTable.id
+  route_table_id = aws_route_table.privateRouteTableB.id
 }
 
 resource "aws_subnet" "publicSubnetA" {
