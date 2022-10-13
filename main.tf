@@ -5,7 +5,6 @@ terraform {
       version = "~> 4.16"
     }
   }
-
   required_version = ">= 1.2.0"
 }
 
@@ -22,13 +21,12 @@ resource "aws_instance" "app_server" {
   }
 }
 
-
 resource "aws_eip" "TrainingEIPA" {
-  vpc              = true
+  vpc = true
 }
 
 resource "aws_eip" "TrainingEIPB" {
-  vpc              = true
+  vpc = true
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -56,17 +54,14 @@ resource "aws_nat_gateway" "TrainingNGWB" {
   tags = {
     Name = "TrainingNGWB"
   }
-
 }
 
 resource "aws_route_table" "publicRouteTableA" {
   vpc_id = aws_vpc.TrainingVPC.id
-
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
-
 
   tags = {
     Name = "publicRouteTableA"
@@ -86,8 +81,8 @@ resource "aws_route_table_association" "PublicAssociationB" {
 
 resource "aws_route_table" "privateRouteTableA" {
   vpc_id = aws_vpc.TrainingVPC.id
-route {
-    cidr_block = "0.0.0.0/0"
+  route {
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.TrainingNGWA.id
   }
 
@@ -98,8 +93,8 @@ route {
 
 resource "aws_route_table" "privateRouteTableB" {
   vpc_id = aws_vpc.TrainingVPC.id
-route {
-    cidr_block = "0.0.0.0/0"
+  route {
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.TrainingNGWB.id
   }
 
