@@ -7,9 +7,11 @@ terraform {
   }
   required_version = ">= 1.2.0"
 }
+
 provider "aws" {
   region = "us-west-2"
 }
+
 resource "aws_instance" "app_server" {
   ami           = "ami-830c94e3"
   instance_type = "t2.micro"
@@ -18,12 +20,15 @@ resource "aws_instance" "app_server" {
     Name = "ExampleAppServerInstance"
   }
 }
+
 resource "aws_eip" "TrainingEIPA" {
   vpc = true
 }
+
 resource "aws_eip" "TrainingEIPB" {
   vpc = true
 }
+
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.TrainingVPC.id
 
@@ -31,6 +36,7 @@ resource "aws_internet_gateway" "igw" {
     Name = "TrainingIGW"
   }
 }
+
 resource "aws_nat_gateway" "TrainingNGWA" {
   allocation_id = aws_eip.TrainingEIPA.id
   subnet_id     = aws_subnet.publicSubnetA.id
@@ -40,6 +46,7 @@ resource "aws_nat_gateway" "TrainingNGWA" {
   }
 
 }
+
 resource "aws_nat_gateway" "TrainingNGWB" {
   allocation_id = aws_eip.TrainingEIPB.id
   subnet_id     = aws_subnet.publicSubnetB.id
@@ -48,13 +55,14 @@ resource "aws_nat_gateway" "TrainingNGWB" {
     Name = "TrainingNGWB"
   }
 }
+
 resource "aws_route_table" "publicRouteTableA" {
   vpc_id = aws_vpc.TrainingVPC.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
-  
+
   tags = {
     Name = "publicRouteTableA"
   }
