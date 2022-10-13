@@ -34,6 +34,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_nat_gateway" "TrainingNGWA" {
   allocation_id = aws_eip.TrainingEIPA.id
   subnet_id     = aws_subnet.publicSubnetA.id
+
   tags = {
     Name = "TrainingNGWA"
   }
@@ -42,6 +43,7 @@ resource "aws_nat_gateway" "TrainingNGWA" {
 resource "aws_nat_gateway" "TrainingNGWB" {
   allocation_id = aws_eip.TrainingEIPB.id
   subnet_id     = aws_subnet.publicSubnetB.id
+
   tags = {
     Name = "TrainingNGWB"
   }
@@ -52,6 +54,7 @@ resource "aws_route_table" "publicRouteTableA" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
+  
   tags = {
     Name = "publicRouteTableA"
   }
