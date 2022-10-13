@@ -24,11 +24,11 @@ resource "aws_instance" "app_server" {
 
 
 resource "aws_eip" "TrainingEIPA" {
-  vpc              = true
+  vpc = true
 }
 
 resource "aws_eip" "TrainingEIPB" {
-  vpc              = true
+  vpc = true
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -86,8 +86,8 @@ resource "aws_route_table_association" "PublicAssociationB" {
 
 resource "aws_route_table" "privateRouteTableA" {
   vpc_id = aws_vpc.TrainingVPC.id
-route {
-    cidr_block = "0.0.0.0/0"
+  route {
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.TrainingNGWA.id
   }
 
@@ -98,8 +98,8 @@ route {
 
 resource "aws_route_table" "privateRouteTableB" {
   vpc_id = aws_vpc.TrainingVPC.id
-route {
-    cidr_block = "0.0.0.0/0"
+  route {
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.TrainingNGWB.id
   }
 
