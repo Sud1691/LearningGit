@@ -44,7 +44,7 @@ resource "aws_nat_gateway" "TrainingNGWA" {
   subnet_id     = aws_subnet.publicSubnetA.id
 
   tags = {
-    Name = var.ngw
+    Name = "var.ngw"
   }
 
 }
@@ -54,7 +54,7 @@ resource "aws_nat_gateway" "TrainingNGWB" {
   subnet_id     = aws_subnet.publicSubnetB.id
 
   tags = {
-    Name = var.ngw
+    Name = "var.ngw"
   }
 }
 
@@ -89,7 +89,7 @@ resource "aws_route_table" "privateRouteTableA" {
   }
 
   tags = {
-    Name = var.privateRouteTable
+    Name = "var.privateRouteTable"
   }
 }
 
@@ -101,7 +101,7 @@ resource "aws_route_table" "privateRouteTableB" {
   }
 
   tags = {
-    Name = var.privateRouteTable
+    Name = "var.privateRouteTable"
   }
 }
 
@@ -120,7 +120,7 @@ resource "aws_subnet" "publicSubnetA" {
   cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = var.Public_subnet
+    Name = "var.Public_subnet"
   }
 }
 
@@ -129,7 +129,7 @@ resource "aws_subnet" "publicSubnetB" {
   cidr_block = "10.0.2.0/24"
 
   tags = {
-    Name = var.Public_subnet
+    Name = "var.Public_subnet"
   }
 }
 
@@ -138,7 +138,7 @@ resource "aws_subnet" "privateSubnetA" {
   cidr_block = "10.0.3.0/24"
 
   tags = {
-    Name = var.Private_subnet
+    Name = "var.Private_subnet"
   }
 }
 
@@ -147,7 +147,7 @@ resource "aws_subnet" "privateSubnetB" {
   cidr_block = "10.0.4.0/24"
 
   tags = {
-    Name = var.Private_subnet
+    Name = "var.Private_subnet"
   }
 }
 
