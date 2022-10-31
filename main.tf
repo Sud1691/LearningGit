@@ -17,23 +17,25 @@ resource "aws_instance" "app_server" {
   instance_type = "t2.micro"
 
   tags = {
-    Name = "ExampleAppServerInstance"
+    Name = var.instance_name
   }
 }
 
 resource "aws_eip" "TrainingEIPA" {
   vpc = true
+
 }
 
 resource "aws_eip" "TrainingEIPB" {
   vpc = true
+
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.TrainingVPC.id
 
   tags = {
-    Name = "TrainingIGW"
+    Name = var.igw
   }
 }
 
@@ -42,7 +44,7 @@ resource "aws_nat_gateway" "TrainingNGWA" {
   subnet_id     = aws_subnet.publicSubnetA.id
 
   tags = {
-    Name = "TrainingNGWA"
+    Name = var.ngw
   }
 
 }
@@ -52,7 +54,7 @@ resource "aws_nat_gateway" "TrainingNGWB" {
   subnet_id     = aws_subnet.publicSubnetB.id
 
   tags = {
-    Name = "TrainingNGWB"
+    Name = var.ngw
   }
 }
 
@@ -64,7 +66,7 @@ resource "aws_route_table" "publicRouteTableA" {
   }
 
   tags = {
-    Name = "publicRouteTableA"
+    Name = var.publicRouteTable
   }
 }
 
@@ -87,7 +89,7 @@ resource "aws_route_table" "privateRouteTableA" {
   }
 
   tags = {
-    Name = "privateRouteTableA"
+    Name = var.privateRouteTable
   }
 }
 
@@ -99,7 +101,7 @@ resource "aws_route_table" "privateRouteTableB" {
   }
 
   tags = {
-    Name = "privateRouteTableB"
+    Name = var.privateRouteTable
   }
 }
 
@@ -118,7 +120,7 @@ resource "aws_subnet" "publicSubnetA" {
   cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = "publicSubnetA"
+    Name = var.Public_subnet
   }
 }
 
@@ -127,7 +129,7 @@ resource "aws_subnet" "publicSubnetB" {
   cidr_block = "10.0.2.0/24"
 
   tags = {
-    Name = "publicSubnetB"
+    Name = var.Public_subnet
   }
 }
 
@@ -136,7 +138,7 @@ resource "aws_subnet" "privateSubnetA" {
   cidr_block = "10.0.3.0/24"
 
   tags = {
-    Name = "privateSubnetA"
+    Name = var.Private_subnet
   }
 }
 
@@ -145,7 +147,7 @@ resource "aws_subnet" "privateSubnetB" {
   cidr_block = "10.0.4.0/24"
 
   tags = {
-    Name = "privateSubnetB"
+    Name = var.Private_subnet
   }
 }
 
@@ -154,7 +156,7 @@ resource "aws_vpc" "TrainingVPC" {
   instance_tenancy = "default"
 
   tags = {
-    Name = "TrainingVPC"
+    Name = var.vpc_name
   }
 }
 
