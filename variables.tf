@@ -14,5 +14,6 @@ variable Private_subnet {
     type = list
 }
 variable vpc_name {}
+variable elastic_ip {}
 
 
