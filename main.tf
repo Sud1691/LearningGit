@@ -21,13 +21,14 @@ resource "aws_instance" "app_server" {
   }
 }
 
-resource "aws_eip" "TrainingEIPA" {
+resource "aws_eip" "TrainingEIP" {
+  count = length(var.elastic_ip)
   vpc = true
 
-}
 
-resource "aws_eip" "TrainingEIPB" {
-  vpc = true
+  tags = {
+    Name = var.elastic_ip[count.index]
+  }
 
 }
 
@@ -39,26 +40,18 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_nat_gateway" "TrainingNGWA" {
-  allocation_id = aws_eip.TrainingEIPA.id
-  subnet_id     = aws_subnet.publicSubnetA.id
+resource "aws_nat_gateway" "TrainingNGW" {
+  count = length(var.ngw)
+  allocation_id = aws_eip.TrainingEIP[count.index].id
+  subnet_id     = aws_subnet.publicSubnet[count.index].id
 
   tags = {
-    Name = var.ngw[0]
+    Name = var.ngw[count.index]
   }
 
 }
 
-resource "aws_nat_gateway" "TrainingNGWB" {
-  allocation_id = aws_eip.TrainingEIPB.id
-  subnet_id     = aws_subnet.publicSubnetB.id
-
-  tags = {
-    Name = var.ngw[1]
-  }
-}
-
-resource "aws_route_table" "publicRouteTableA" {
+resource "aws_route_table" "publicRouteTable" {
   vpc_id = aws_vpc.TrainingVPC.id
   route {
     cidr_block = "0.0.0.0/0"
@@ -70,84 +63,50 @@ resource "aws_route_table" "publicRouteTableA" {
   }
 }
 
-resource "aws_route_table_association" "PublicAssociationA" {
-  subnet_id      = aws_subnet.publicSubnetA.id
-  route_table_id = aws_route_table.publicRouteTableA.id
-}
-
-resource "aws_route_table_association" "PublicAssociationB" {
-  subnet_id      = aws_subnet.publicSubnetB.id
-  route_table_id = aws_route_table.publicRouteTableA.id
+resource "aws_route_table_association" "PublicAssociation" {
+  count = length(var.Public_subnet)
+  subnet_id      = aws_subnet.publicSubnet[count.index].id
+  route_table_id = aws_route_table.publicRouteTable.id
 }
 
 
-resource "aws_route_table" "privateRouteTableA" {
+resource "aws_route_table" "privateRouteTable" {
+  count = length(var.privateRouteTable)
   vpc_id = aws_vpc.TrainingVPC.id
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.TrainingNGWA.id
+    nat_gateway_id = aws_nat_gateway.TrainingNGW[count.index].id
   }
 
   tags = {
-    Name = var.privateRouteTable[0]
+    Name = var.privateRouteTable[count.index]
   }
 }
 
-resource "aws_route_table" "privateRouteTableB" {
-  vpc_id = aws_vpc.TrainingVPC.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.TrainingNGWB.id
-  }
-
-  tags = {
-    Name = var.privateRouteTable[1]
-  }
+resource "aws_route_table_association" "PrivateAssociation" {
+  count = length(var.Private_subnet)
+  subnet_id      = aws_subnet.privateSubnet[count.index].id
+  route_table_id = aws_route_table.privateRouteTable[count.index].id
 }
 
-resource "aws_route_table_association" "PrivateAssociationA" {
-  subnet_id      = aws_subnet.privateSubnetA.id
-  route_table_id = aws_route_table.privateRouteTableA.id
-}
 
-resource "aws_route_table_association" "PrivateAssociationB" {
-  subnet_id      = aws_subnet.privateSubnetB.id
-  route_table_id = aws_route_table.privateRouteTableB.id
-}
-
-resource "aws_subnet" "publicSubnetA" {
+resource "aws_subnet" "publicSubnet" {
+  count = length(var.Public_subnet)
   vpc_id     = aws_vpc.TrainingVPC.id
   cidr_block = "10.0.1.0/24"
 
   tags = {
-    Name = var.Public_subnet[0]
+    Name = var.Public_subnet[count.index]
   }
 }
 
-resource "aws_subnet" "publicSubnetB" {
-  vpc_id     = aws_vpc.TrainingVPC.id
-  cidr_block = "10.0.2.0/24"
-
-  tags = {
-    Name = var.Public_subnet[1]
-  }
-}
-
-resource "aws_subnet" "privateSubnetA" {
+resource "aws_subnet" "privateSubnet" {
+  count = length(var.Private_subnet)
   vpc_id     = aws_vpc.TrainingVPC.id
   cidr_block = "10.0.3.0/24"
 
   tags = {
-    Name = var.Private_subnet[0]
-  }
-}
-
-resource "aws_subnet" "privateSubnetB" {
-  vpc_id     = aws_vpc.TrainingVPC.id
-  cidr_block = "10.0.4.0/24"
-
-  tags = {
-    Name = var.Private_subnet[1]
+    Name = var.Private_subnet[count.index]
   }
 }
 
