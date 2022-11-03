@@ -42,8 +42,8 @@ resource "aws_internet_gateway" "igw" {
 
 resource "aws_nat_gateway" "TrainingNGW" {
   count = length(var.ngw)
-  allocation_id = aws_eip.TrainingEIP.id
-  subnet_id     = aws_subnet.publicSubnet.id
+  allocation_id = aws_eip.TrainingEIP[count.index].id
+  subnet_id     = aws_subnet.publicSubnet[count.index].id
 
   tags = {
     Name = var.ngw[count.index]
@@ -65,8 +65,8 @@ resource "aws_route_table" "publicRouteTable" {
 
 resource "aws_route_table_association" "PublicAssociation" {
   count = 2
-  subnet_id      = aws_subnet.publicSubnet.id
-  route_table_id = aws_route_table.publicRouteTableA.id
+  subnet_id      = aws_subnet.publicSubnet[count.index].id
+  route_table_id = aws_route_table.publicRouteTable.id
 }
 
 
@@ -75,7 +75,7 @@ resource "aws_route_table" "privateRouteTable" {
   vpc_id = aws_vpc.TrainingVPC.id
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.TrainingNGW.id
+    nat_gateway_id = aws_nat_gateway.TrainingNGW[count.index].id
   }
 
   tags = {
@@ -85,8 +85,8 @@ resource "aws_route_table" "privateRouteTable" {
 
 resource "aws_route_table_association" "PrivateAssociation" {
   count = 2
-  subnet_id      = aws_subnet.privateSubnet.id
-  route_table_id = aws_route_table.privateRouteTable.id
+  subnet_id      = aws_subnet.privateSubnet[count.index].id
+  route_table_id = aws_route_table.privateRouteTable[count.index].id
 }
 
 
