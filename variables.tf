@@ -15,5 +15,10 @@ variable Private_subnet {
 }
 variable vpc_name {}
 variable elastic_ip {}
+variable Public_subnet_cidr {
+    type = list
+}
 
-
+variable Private_subnet_cidr {
+    type = list
+}

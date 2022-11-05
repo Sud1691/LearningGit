@@ -93,7 +93,7 @@ resource "aws_route_table_association" "PrivateAssociation" {
 resource "aws_subnet" "publicSubnet" {
   count = length(var.Public_subnet)
   vpc_id     = aws_vpc.TrainingVPC.id
-  cidr_block = "10.0.1.0/24"
+  cidr_block = var.Public_subnet_cidr[count.index]
 
   tags = {
     Name = var.Public_subnet[count.index]
@@ -103,7 +103,7 @@ resource "aws_subnet" "publicSubnet" {
 resource "aws_subnet" "privateSubnet" {
   count = length(var.Private_subnet)
   vpc_id     = aws_vpc.TrainingVPC.id
-  cidr_block = "10.0.3.0/24"
+  cidr_block = var.Private_subnet_cidr[count.index]
 
   tags = {
     Name = var.Private_subnet[count.index]

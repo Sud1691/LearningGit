@@ -7,3 +7,5 @@ Public_subnet = ["publicSubnetA","publicSubnetB"]
 Private_subnet = ["privateSubnetA","privateSubnetB"]
 vpc_name = "TrainingVPC"
 elastic_ip =  ["Elastic_IP_A","Elastic_IP_B"]
+Public_subnet_cidr = ["10.0.1.0/24","10.0.2.0/24"]
+Private_subnet_cidr = ["10.0.3.0/24","10.0.4.0/24"]
