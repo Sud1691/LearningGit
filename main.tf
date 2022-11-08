@@ -119,3 +119,4 @@ resource "aws_vpc" "TrainingVPC" {
   }
 }
 
+hi kritika
